@@ -2,14 +2,21 @@ package com.mariasilva.cursomc.services;
 
 import java.util.List;
 
+import javax.persistence.OrderBy;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.mariasilva.cursomc.domain.Categoria;
 import com.mariasilva.cursomc.repositories.CategoriaRepository;
 import com.mariasilva.cursomc.services.Exceptions.DataIntegrityException;
 import com.mariasilva.cursomc.services.Exceptions.ObjectNotFoundException;
+
+import ch.qos.logback.classic.pattern.LineSeparatorConverter;
 
 @Service
 public class CategoriaService {
@@ -45,5 +52,10 @@ public class CategoriaService {
 	
 	public List<Categoria> findAll(){
 		return repo.findAll();
+	}
+	
+	public Page<Categoria> findPage(Integer page,Integer linesPerPage, String orderBy, String direction){
+		PageRequest pageRequest = new PageRequest(page, linesPerPage,Direction.valueOf(direction),  orderBy);
+		return repo.findAll(pageRequest);
 	}
 }
